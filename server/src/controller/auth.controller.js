@@ -110,5 +110,24 @@ async function logoutUser(req, res){
     }
 }
 
+async function getCurrentUser(req, res){
+    try {
+        // const token = req.cookies.token;
+        // if(!token){
+        //     return res.status(400).json({message: "No token found"});
+        // }
+        // const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await userModel.findById(req.user.id);
+        return res.status(200).json({message: "User found successfully", user:{
+            id: user._id,
+            userName: user.userName,
+            email: user.email
+        }});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
 
-module.exports = {registerUser, loginUser, logoutUser} 
+
+module.exports = { registerUser, loginUser, logoutUser, getCurrentUser }; 
